@@ -12,6 +12,7 @@ using System.Web.Http.Filters;
 using Castle.Core.Logging;
 using Castle.Facilities.Startable;
 using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
@@ -67,7 +68,10 @@ namespace Inceptum.AppServer.Bootstrap
                     .For<IConfigurationProvider, IManageableConfigurationProvider>()
                     .ImplementedBy<LocalStorageConfigurationProvider>()
                     .Named("localStorageConfigurationProvider")
-                    .DependsOn(new { configFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration") }));
+                    .DependsOn(new { configFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration") }).LifestyleTransient());
+
+                container.Register(Component.For<IConfigurationProviderFactory>().AsFactory());
+
                 //Debugger.Launch();
                 var provider = container.Resolve<IManageableConfigurationProvider>();
                 createDefaultConfigurationIfRequired(provider);
@@ -140,7 +144,7 @@ namespace Inceptum.AppServer.Bootstrap
                 container
             };
 
-        }
+        }        
 
         private static void configureApiHost(IWindsorContainer container)
         {

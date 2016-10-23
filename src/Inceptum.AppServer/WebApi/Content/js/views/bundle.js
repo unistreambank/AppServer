@@ -101,9 +101,10 @@ define([
                             alerts.show({type:"info",text:"Bundle '"+model.get("name")+"' "+action+"d"});
                             self.navigate('#/configurations/'+model.get("configuration")+"/bundles/"+model.id, true);
                         },
-                        error: function (model,response) {
+                        error: function (model, response) {
+                            console.log(response);
                             var bundleId=action==="update"?"'"+model.id+"'":"";
-                            alerts.show({type:"error",text:"Failed to "+action+" bundle "+bundleId+". "+JSON.parse(response.responseText).Error});
+                            alerts.show({type:"error",text:"Failed to "+action+" bundle "+bundleId+". "+JSON.parse(response.responseText).message});
                         },
                         wait:true
                     };
