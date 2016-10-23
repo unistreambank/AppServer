@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Http;
@@ -85,6 +86,10 @@ namespace Inceptum.AppServer.WebApi
                     .UseWebApi(config)
                     .MapSignalR(hubConfig)
                     .MapSignalR<LogConnection>("/log");
+
+                var listener = (HttpListener)appBuilder.Properties["System.Net.HttpListener"];
+
+                listener.AuthenticationSchemes = AuthenticationSchemes.IntegratedWindowsAuthentication;
             });
         }
 
